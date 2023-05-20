@@ -1,3 +1,6 @@
+using Ecommerce.Server.EF;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,9 +10,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
-
+var connectionString = builder.Configuration.GetConnectionString("Ecommerce_Db");
+builder.Services.AddDbContext<EDbContext>(option =>
+{
+    option.UseSqlServer(connectionString);
+});
 // Configure the HTTP request pipeline.
+var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
